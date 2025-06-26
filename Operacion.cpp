@@ -1,32 +1,32 @@
 #include "Operacion.h"
-#include <stdexcept>
+#include "ExcepcionesSistema.h"
 
 Operacion::Operacion(
-    string fecha, string tipo, map<int, int> denoms,
+    string fecha, string tipo, map<Moneda*, int> monedas,
     string tipoActivo, Transportadora *t, string plaza,
     EntidadBancaria *origen, EntidadBancaria *destino)
-    : fecha(fecha), tipo(tipo), denominaciones(denoms), tipoActivo(tipoActivo),
+    : fecha(fecha), tipo(tipo), monedas(monedas), tipoActivo(tipoActivo),
       transportadora(t), plaza(plaza), origen(origen), destino(destino) {
     if (tipo != "Deposito" && tipo != "Retiro" && tipo != "Traslado") {
-        throw std::invalid_argument("Tipo de operación inválido");
+        throw ExcepcionOperacion("Tipo de operación inválido");
     }
     if (!t || !origen || !destino) {
-        throw std::invalid_argument("Transportadora, origen o destino nulo");
+        throw ExcepcionOperacion("Transportadora, origen o destino nulo");
     }
-    for (const auto &d : denominaciones) {
-        if (d.first <= 0 || d.second < 0) {
-            throw std::invalid_argument("Denominaciones inválidas");
+    for (const auto &m : monedas) {
+        if (!m.first || m.second < 0) {
+            throw ExcepcionOperacion("Moneda nula o cantidad inválida");
         }
     }
 }
 
-int Operacion::calcularTotal() {
-    int total = 0;
-    for (auto &d : denominaciones) {
-        total += d.first * d.second;
+double Operacion::calcularTotal() {
+    double total = 0.0;
+    for (auto &m : monedas) {
+        total += m.first->valor * m.second;
     }
     if (total <= 0) {
-        throw std::runtime_error("El total de la operación debe ser mayor a cero");
+        throw ExcepcionOperacion("El total de la operación debe ser mayor a cero");
     }
     return total;
 }

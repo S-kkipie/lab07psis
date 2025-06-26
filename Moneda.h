@@ -7,7 +7,9 @@ class Moneda {
 public:
     string nombre;
     string simbolo;
-    Moneda(string nombre, string simbolo) : nombre(nombre), simbolo(simbolo) {}
+    double valor; // Valor de la moneda (por ejemplo, en pesos)
+    Moneda(string nombre, string simbolo, double valor)
+        : nombre(nombre), simbolo(simbolo), valor(valor) {}
 };
 
 #endif // MONEDA_H

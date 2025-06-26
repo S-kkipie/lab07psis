@@ -1,11 +1,12 @@
 #include "Boveda.h"
+#include "ExcepcionesSistema.h"
 #include <iostream>
 
 Boveda::Boveda(string plaza) : plaza(plaza) {}
 
 void Boveda::actualizarSaldo(string tipo, int cantidad) {
     if (saldos[tipo] + cantidad < 0) {
-        throw std::runtime_error("Saldo insuficiente para la operación en la boveda " + plaza);
+        throw ExcepcionOperacion("Saldo insuficiente en la bóveda");
     }
     saldos[tipo] += cantidad;
 }

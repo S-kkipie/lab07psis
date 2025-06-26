@@ -1,9 +1,9 @@
 #include "SistemaBovedas.h"
+#include "ExcepcionesSistema.h"
 #include <iostream>
-#include <stdexcept>
 
 void SistemaBovedas::agregarBanco(EntidadBancaria *banco) {
-    if (!banco) throw std::invalid_argument("Banco nulo");
+    if (!banco) throw ExcepcionEntidad("Banco nulo");
     bancos.push_back(banco);
 }
 
@@ -16,10 +16,10 @@ void SistemaBovedas::registrarOperacion(Operacion op) {
     Boveda *boveda_origen = op.origen->obtenerBoveda(op.plaza);
     Boveda *boveda_destino = op.destino->obtenerBoveda(op.plaza);
     if (!boveda_destino && op.tipo != "Retiro") {
-        throw std::runtime_error("Bóveda destino no encontrada");
+        throw ExcepcionEntidad("Bóveda destino no encontrada");
     }
     if (!boveda_origen && op.tipo != "Deposito") {
-        throw std::runtime_error("Bóveda origen no encontrada");
+        throw ExcepcionEntidad("Bóveda origen no encontrada");
     }
     if (op.tipo == "Deposito") {
         boveda_destino->actualizarSaldo(op.tipoActivo, total);
